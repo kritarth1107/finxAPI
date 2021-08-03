@@ -345,7 +345,7 @@ const transactionsGETx = async (req, res) => {
                     TRXNNO:f[i].TRXNNO,
                     TRX_DATE:f[i].TRX_DATE,
                     UNITS:f[i].UNITS,
-                    PURPRICEf[i].PURPRICE,
+                    PURPRICE:f[i].PURPRICE,
                     AMOUNT:f[i].AMOUNT,
                     STAMP_DUTY:f[i].STAMP_DUTY,
                     TRX_NATURE:f[i].TRX_NATURE,
