@@ -332,7 +332,7 @@ const transactionsGETx = async (req, res) => {
             var FOLIONO = f[i].FOLIO_NO;
             var PRODCODE = f[i].PRODCODE;
 
-            var folioData = await transactionsModel
+            var folioData = await foliosModel
             .findOne({ FOLIOCHK:FOLIONO,PRODUCT:PRODCODE,DISTRIBUTOR:key_n[1] });
 
             var invData = await investorsModel
