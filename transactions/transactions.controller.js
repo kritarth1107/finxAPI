@@ -363,7 +363,7 @@ const transactionsGETx = async (req, res) => {
                     ADDRESS1:invData.ADDRESS1,
                     ADDRESS2:invData.ADDRESS2,
                     CITY:invData.CITY
-                }
+                });
 
             finalsData.push(upds);
 
