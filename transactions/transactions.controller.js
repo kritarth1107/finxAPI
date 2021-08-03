@@ -6,6 +6,25 @@ const foliosModel = require("../folios/folios.model");
 const manageService = require("../manage/manages.service");
 const investorsModel = require("../investors/investors.model");
 
+const requestHTTP = require('request');
+const { json } = require("express");
+const crypto = require('crypto');
+require("dotenv").config();
+const ENCRYPTION_KEY = process.env.ENC_KEY; // Must be 256 bits (32 characters)
+
+
+function decrypt(text) {
+    let textParts = text.split(':');
+    let iv = Buffer.from(textParts.shift(), 'hex');
+    let encryptedText = Buffer.from(textParts.join(':'), 'hex');
+    let decipher = crypto.createDecipheriv('aes-256-cbc', Buffer.from(ENCRYPTION_KEY), iv);
+    let decrypted = decipher.update(encryptedText);
+   
+    decrypted = Buffer.concat([decrypted, decipher.final()]);
+   
+    return decrypted.toString();
+}
+
 
 
 function getProperTrans(string)
