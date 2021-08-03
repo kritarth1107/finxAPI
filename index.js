@@ -1,7 +1,6 @@
 const express = require("express");
 const app = express();
 const DB = require("./config/database");
-const usersRouter = require("./users/users.router");
 const managesRouter = require("./manage/manages.router");
 const schemesRouter = require("./schemes/schemes.router");
 const foliosRouter = require("./folios/folios.router");
@@ -14,7 +13,6 @@ require("dotenv").config();
 DB();
 
 app.use(express.json());
-app.use("/api",usersRouter);
 app.use("/manage",managesRouter);
 app.use("/schemes",schemesRouter);
 app.use("/folios",foliosRouter);
