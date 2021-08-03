@@ -395,7 +395,7 @@ const transactionsGETx = async (req, res) => {
     }
     catch (error) {
         console.log(error);
-        res.json(error);
+        res.status(500).json({status:500,success:false,records:error});
     }
 
 
