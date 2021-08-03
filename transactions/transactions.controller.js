@@ -323,7 +323,7 @@ const transactionsGETx = async (req, res) => {
             .find({ DISTRIBUTOR:key_n[1] })
             .lean();
 
-        if (f.length < 1) {
+        if (f.length > 1) {
           return res.status(404).json({ success:false,status:404,message: "No Folios Found!!" });
         }
 
