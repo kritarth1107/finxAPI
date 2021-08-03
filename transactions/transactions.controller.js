@@ -297,7 +297,7 @@ function getFolios(pancard_number,distributor_id){
     }
 }
 
-const transactionsGET = async (req, res) => {
+const transactionsGETx = async (req, res) => {
     var Transcations = new Array();
     var finalsData= [];
     try
@@ -384,7 +384,7 @@ const transactionsGET = async (req, res) => {
 
 
 module.exports = {
-    transactionsGET,
+    transactionsGETx,
     portfolioAna:async(req,res)=>{
         const body = req.body;
         const headers = req.headers;
