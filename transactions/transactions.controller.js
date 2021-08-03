@@ -3,6 +3,8 @@ const foliosService = require("../folios/folios.service");
 const investorsService = require("../investors/investors.service");
 const transactionsModel = require("./transactions.model");
 const foliosModel = require("../folios/folios.model");
+const manageService = require("../manage/manages.service");
+const investorsModel = require("../investors/investors.model");
 
 
 
@@ -279,8 +281,6 @@ function getFoliosOn(data,distributor_id)
         return null;
     }
 
-
-
 }
 
 
@@ -297,8 +297,94 @@ function getFolios(pancard_number,distributor_id){
     }
 }
 
+const transactionsGET = async (req, res) => {
+    var Transcations = new Array();
+    var finalsData= [];
+    try
+    {
+        var website = req.headers.website;
+        var key = decrypt(req.headers.auth);
+        var key_n = key.split("|");
+        if(key_n[0]!="DISTRIBUTOR")
+        {
+            return res.status(403).json({ success:false,status:403,message: "Unauthorised Access!!" });
+        }
+
+        manageService.checkManage(website,key_n[1],1).then(result=>{
+        if(result==null)
+        {
+            return res.status(403).json({ success:false,status:403,message: "Unauthorised Access!!" });
+        }
+        }).catch(error=>{
+
+        });
+
+        var f = await transactionsModel
+            .find({ DISTRIBUTOR:key_n[1] })
+            .lean();
+
+        if (f.length < 1) {
+          return res.status(404).json({ success:false,status:404,message: "No Folios Found!!" });
+        }
+
+        for (var i = 0; i < f.length; i++)
+        {
+            var FOLIONO = f[i].FOLIO_NO;
+            var PRODCODE = f[i].PRODCODE;
+
+            var folioData = await transactionsModel
+            .findOne({ FOLIOCHK:FOLIONO,PRODUCT:PRODCODE,DISTRIBUTOR:key_n[1] });
+
+            var invData = await investorsModel
+            .findOne({ PAN_NO:folioData.PAN_NO,DISTRIBUTOR:key_n[1] });
+
+            var upds = ({
+                    TID:f[i].TID;,
+                    PRODCODE:f[i].PRODCODE,
+                    FOLIO_NO:f[i].FOLIO_NO,
+                    TRXNNO:f[i].TRXNNO,
+                    TRX_DATE:f[i].TRX_DATE,
+                    UNITS:f[i].UNITS,
+                    PURPRICEf[i].PURPRICE,
+                    AMOUNT:f[i].AMOUNT,
+                    STAMP_DUTY:f[i].STAMP_DUTY,
+                    TRX_NATURE:f[i].TRX_NATURE,
+                    SCH_NAME:folioData.SCH_NAME,
+                    SCH_IISN:folioData.SCH_IISN,
+                    SCH_CATEGORY:folioData.SCH_CATEGORY,
+                    SCH_AMC:folioData.SCH_AMC,
+                    FOLIO_DATE:folioData.FOLIO_DATE,
+                    INV_NAME:invData.INV_NAME,
+                    PAN_NO:invData.PAN_NO,
+                    MOBILE_NO:invData.MOBILE_NO,
+                    EMAIL:invData.EMAIL,
+                    INV_DOB:invData.INV_DOB,
+                    PINCODE:invData.PINCODE,
+                    ADDRESS1:invData.ADDRESS1,
+                    ADDRESS2:invData.ADDRESS2,
+                    CITY:invData.CITY
+                }
+
+            finalsData.push(upds);
+
+
+        }
+
+        res.status(200).json({status:200,success:true,records:finalsData});
+
+
+    }
+    catch (error) {
+        console.log(error);
+        res.json(error);
+    }
+
+
+    };
+
 
 module.exports = {
+    transactionsGET,
     portfolioAna:async(req,res)=>{
         const body = req.body;
         const headers = req.headers;
