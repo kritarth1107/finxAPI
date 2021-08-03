@@ -339,7 +339,7 @@ const transactionsGETx = async (req, res) => {
             .findOne({ PAN_NO:folioData.PAN_NO,DISTRIBUTOR:key_n[1] });
 
             var upds = ({
-                    TID:f[i].TID;,
+                    TID:f[i].TID,
                     PRODCODE:f[i].PRODCODE,
                     FOLIO_NO:f[i].FOLIO_NO,
                     TRXNNO:f[i].TRXNNO,
