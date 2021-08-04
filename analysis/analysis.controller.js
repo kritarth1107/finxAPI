@@ -3,6 +3,7 @@
 const folioModel = require("../folios/folios.model");
 const transModel = require("../transactions/transactions.model");
 const investorsModel = require("../investors/investors.model");
+const navModel = require("../nav/navs.model");
 const manageService = require("../manage/manages.service");
 const requestHTTP = require('request');
 const { json } = require("express");
@@ -115,6 +116,7 @@ const folioGET = async (req, res) => {
         var FOLIONO = f[i].FOLIOCHK;
         var SCH_CODE = f[i].SCH_CODE;
         var PRODUCT = f[i].PRODUCT;
+        var SCH_IISN = f[i].SCH_IISN;
         var SCH_AMC = f[i].SCH_AMC.toLowerCase();
         var SCH_CATEGORY = f[i].SCH_CATEGORY.toLowerCase();
         /*const NAV_API = await fetch('https://api.mfapi.in/mf/'+SCH_CODE);
@@ -123,14 +125,21 @@ const folioGET = async (req, res) => {
         console.log(myJson);*/
         var NAV_DATE = null;
         var NAV_PRICE = null;
-        var navData = await getNAV(SCH_CODE);
+        //var navData = await getNAV(SCH_CODE);
 
-
+        const navData = await navModel.findOne({
+    "$or": [{
+        ISIN_1:SCH_IISN
+    }, {
+        ISIN_2:SCH_IISN
+    }]
+});
         const transactions = await transModel.find({ FOLIO_NO: FOLIONO,PRODCODE: PRODUCT,  DISTRIBUTOR: key_n[1]}).lean();
         
 
                 var upds = ({
-                    NAV:navData,
+                    NAV_PRICE:navData.NAV,
+                    NAV_DATE:navData.NAV_DATE,
                     FOLIONO:f[i].FOLIOCHK,
                     BROKER_COD:f[i].BROKER_COD,
                     SCH_CODE:f[i].SCH_CODE,
@@ -232,19 +241,27 @@ const folioClient = async (req,res) =>{
               var SCH_CODE = f[i].SCH_CODE;
               var SCH_AMC = f[i].SCH_AMC.toLowerCase();
               var SCH_CATEGORY = f[i].SCH_CATEGORY.toLowerCase();
+              var SCH_IISN = f[i].SCH_IISN;
               /*const NAV_API = await fetch('https://api.mfapi.in/mf/'+SCH_CODE);
               const myJson = await NAV_API.json();
       
               console.log(myJson);*/
               var NAV_DATE = null;
               var NAV_PRICE = null;
-              var navData = await getNAV(SCH_CODE);
-      
+
+      const navData = await navModel.findOne({
+    "$or": [{
+        ISIN_1:SCH_IISN
+    }, {
+        ISIN_2:SCH_IISN
+    }]
+});
       
               const transactions = await transModel.find({ FOLIO_NO: FOLIONO,  DISTRIBUTOR: invCheck.DISTRIBUTOR}).lean();
              
                       var upds = ({
-                          NAV:navData,
+                    NAV_PRICE:navData.NAV,
+                    NAV_DATE:navData.NAV_DATE,
                           FOLIONO:f[i].FOLIOCHK,
                           BROKER_COD:f[i].BROKER_COD,
                           SCH_CODE:f[i].SCH_CODE,
