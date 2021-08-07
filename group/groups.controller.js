@@ -105,21 +105,32 @@ const create = async (req, res) => {
         });
 
 
-        var groupBody = ({
-                    GROUP_TITLE:title,
-                    GROUP_ADMIN:admin,
-                    GROUP_MEMS:"1",
-                    DISTRIBUTOR:key_n[1]
-                });
-        const createGroup = await groupModel.create(groupBody);
-        if(createGroup==null)
+        const findGroup = await groupModel.findOne({GROUP_TITLE:title,DISTRIBUTOR:key_n[1]});
+        if(findGroup==null)
         {
-            return res.status(500).json({ success:false,status:500,message: "Error!!" });
+                var groupBody = ({
+                        GROUP_TITLE:title,
+                        GROUP_ADMIN:admin,
+                        GROUP_MEMS:"1",
+                        DISTRIBUTOR:key_n[1]
+                    });
+            const createGroup = await groupModel.create(groupBody);
+            if(createGroup==null)
+            {
+                return res.status(500).json({ success:false,status:500,message: "Error!!" });
+            }
+            else
+            {
+                return res.status(200).json({ success:true,status:200,message: "Group Created!!",group:createGroup._id });
+            }
         }
         else
         {
-            return res.status(200).json({ success:true,status:200,message: "Group Created!!",group:createGroup._id });
+            return res.status(500).json({ success:false,status:500,message: "Group with name already exists!!" });
         }
+
+
+        
     }
     catch(error)
     {
