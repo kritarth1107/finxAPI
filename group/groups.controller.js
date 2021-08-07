@@ -80,7 +80,60 @@ const getGroups = async (req, res) => {
 
     }
 }
+ const members = async (req,res) => {
+    try
+    {
+        const { groupID } = req.body;
+        var website = req.headers.website;
+        var key = decrypt(req.headers.auth);
+        var key_n = key.split("|");
+        if(key_n[0]!="DISTRIBUTOR")
+        {
+            return res.status(403).json({ success:false,status:403,message: "Unauthorised Access!!" });
+        }
 
+        manageService.checkManage(website,key_n[1],1).then(result=>{
+            if(result==null)
+            {
+                return res.status(403).json({ success:false,status:403,message: "Unauthorised Access!!" });
+            }
+        }).catch(error=>{
+
+        });
+
+        const findGroup = await groupModel.findById(groupID);
+
+        if(findGroup==null)
+        {
+            return res.status(500).json({ success:false,status:500,message: "Error!!" });
+        }
+        else
+        {
+
+        const findInv = await investorssModel.find({INV_GROUP:groupID,DISTRIBUTOR:key_n[1]});
+        const inv = await investorssModel.findOne({DISTRIBUTOR:key_n[1],PAN_NO:findGroup.GROUP_ADMIN});
+
+            var upds = ({
+                    success:true,status:200,
+                    GROUP_LEADER_NAME:inv.INV_NAME,
+                    GROUP_LEADER_MOBILE_NO:inv.MOBILE_NO,
+                    GROUP_LEADER_PAN_NO:inv.PAN_NO,
+                    GROUP_LEADER_INV_PROFILE:inv.INV_PROFILE,
+                    GROUP_TITLE:findGroup.GROUP_TITLE,
+                    GID:findGroup._id,
+                    MEMBERS:findInv
+                });
+            return res.status(200).json(upds);
+        }
+        
+
+
+    }
+    catch(error)
+    {
+        res.json(error);
+    }
+ }
 
 const create = async (req, res) => {
 
@@ -108,21 +161,34 @@ const create = async (req, res) => {
         const findGroup = await groupModel.findOne({GROUP_TITLE:title,DISTRIBUTOR:key_n[1]});
         if(findGroup==null)
         {
+            const findInv = await investorssModel.findOne({PAN_NO:admin,DISTRIBUTOR:key_n[1]});
+            if(findInv==null)
+            {
+                return res.status(500).json({ success:false,status:500,message: "Invalid Group Leader!!" });
+            }
+            else
+            {
                 var groupBody = ({
                         GROUP_TITLE:title,
                         GROUP_ADMIN:admin,
                         GROUP_MEMS:"1",
                         DISTRIBUTOR:key_n[1]
                     });
-            const createGroup = await groupModel.create(groupBody);
-            if(createGroup==null)
-            {
-                return res.status(500).json({ success:false,status:500,message: "Error!!" });
+                const createGroup = await groupModel.create(groupBody);
+                if(createGroup==null)
+                {
+                    return res.status(500).json({ success:false,status:500,message: "Error!!" });
+                }
+                else
+                {
+                    const changeT = await investorssModel.findOneAndUpdate({DISTRIBUTOR:key_n[1],PAN_NO:admin},{
+                        INV_GROUP:createGroup._id
+                    });
+                    return res.status(200).json({ success:true,status:200,message: "Group Created!!",group:createGroup._id });
+                }
             }
-            else
-            {
-                return res.status(200).json({ success:true,status:200,message: "Group Created!!",group:createGroup._id });
-            }
+
+            
         }
         else
         {
@@ -143,5 +209,5 @@ const create = async (req, res) => {
 
 
 module.exports = {
-    create,getGroups
+    create,getGroups,members
 }
