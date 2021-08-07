@@ -337,5 +337,5 @@ const create = async (req, res) => {
 
 
 module.exports = {
-    create,getGroups,members
+    create,getGroups,members,deleteMember,changeLeader
 }
