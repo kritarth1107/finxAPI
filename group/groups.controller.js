@@ -135,6 +135,134 @@ const getGroups = async (req, res) => {
     }
  }
 
+
+  const deleteMember = async (req,res) => {
+    try
+    {
+        const { groupID,pan } = req.body;
+        var website = req.headers.website;
+        var key = decrypt(req.headers.auth);
+        var key_n = key.split("|");
+        if(key_n[0]!="DISTRIBUTOR")
+        {
+            return res.status(403).json({ success:false,status:403,message: "Unauthorised Access!!" });
+        }
+
+        manageService.checkManage(website,key_n[1],1).then(result=>{
+            if(result==null)
+            {
+                return res.status(403).json({ success:false,status:403,message: "Unauthorised Access!!" });
+            }
+        }).catch(error=>{
+
+        });
+
+        const findGroup = await groupModel.findById(groupID);
+
+        if(findGroup==null)
+        {
+            return res.status(500).json({ success:false,status:500,message: "Error!!" });
+        }
+        else
+        {
+
+            const inv = await investorssModel.findOne({DISTRIBUTOR:key_n[1],PAN_NO:pan,INV_GROUP:groupID});
+            if(inv==null)
+            {
+                return res.status(500).json({ success:false,status:500,message: "Invalid Investor!!" });
+            }
+            else
+            {
+                if(findGroup.GROUP_ADMIN==pan)
+                {
+                    return res.status(500).json({ success:false,status:500,message: "Group leader Can not be removed!!" });
+                }
+                else
+                {
+                    const changeT = await investorssModel.findOneAndUpdate({DISTRIBUTOR:key_n[1],PAN_NO:pan},{
+                        INV_GROUP:"NOT ASSIGNED"
+                    });
+                    return res.status(200).json({ success:true,status:200,message: "Member Removed!!" });
+                }
+                
+            }
+
+        }
+        
+
+
+    }
+    catch(error)
+    {
+        res.json(error);
+    }
+ }
+
+
+  const changeLeader = async (req,res) => {
+    try
+    {
+        const { groupID,pan } = req.body;
+        var website = req.headers.website;
+        var key = decrypt(req.headers.auth);
+        var key_n = key.split("|");
+        if(key_n[0]!="DISTRIBUTOR")
+        {
+            return res.status(403).json({ success:false,status:403,message: "Unauthorised Access!!" });
+        }
+
+        manageService.checkManage(website,key_n[1],1).then(result=>{
+            if(result==null)
+            {
+                return res.status(403).json({ success:false,status:403,message: "Unauthorised Access!!" });
+            }
+        }).catch(error=>{
+
+        });
+
+        const findGroup = await groupModel.findById(groupID);
+
+        if(findGroup==null)
+        {
+            return res.status(500).json({ success:false,status:500,message: "Error!!" });
+        }
+        else
+        {
+
+            const inv = await investorssModel.findOne({DISTRIBUTOR:key_n[1],PAN_NO:pan,INV_GROUP:groupID});
+            if(inv==null)
+            {
+                return res.status(500).json({ success:false,status:500,message: "Invalid Investor!!" });
+            }
+            else
+            {
+                if(findGroup.GROUP_ADMIN==pan)
+                {
+                    return res.status(500).json({ success:false,status:500,message: "Already Group Leader!!" });
+                }
+                else
+                {
+                    const changeT = await groupModel.findByIdAndUpdate(groupID,{
+                        GROUP_ADMIN:pan
+                    });
+                    return res.status(200).json({ success:true,status:200,message: "Leader Changed!!" });
+                }
+                
+            }
+
+        }
+        
+
+
+    }
+    catch(error)
+    {
+        res.json(error);
+    }
+ }
+
+
+
 const create = async (req, res) => {
 
     try
