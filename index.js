@@ -7,6 +7,7 @@ const foliosRouter = require("./folios/folios.router");
 const transactionRouter = require("./transactions/transactions.router");
 const analysisRouter = require("./analysis/analysis.router");
 const investorsRouter = require("./investors/investors.router");
+const groupsRouter = require("./group/groups.router");
 //const dbfRouter = require("./dbf/dbf.router");
 require("dotenv").config();
 
@@ -19,6 +20,7 @@ app.use("/folios",foliosRouter);
 app.use("/transactions",transactionRouter);
 app.use("/analysis",analysisRouter);
 app.use("/investor",investorsRouter);
+app.use("/groups",groupsRouter);
 //app.use("/dbf",dbfRouter);
 
 

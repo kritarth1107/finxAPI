@@ -31,6 +31,7 @@ const transactionsGETx = async (req, res) => {
     var finalsData= [];
     try
     {
+        const { start,end,folio } = req.body;
         var website = req.headers.website;
         var key = decrypt(req.headers.auth);
         var key_n = key.split("|");
@@ -48,9 +49,21 @@ const transactionsGETx = async (req, res) => {
 
         });
 
-        var f = await transactionsModel
-            .find({ DISTRIBUTOR:key_n[1] })
+        var f =null;
+
+        if(folio=="all" || folio==null || folio=="")
+        {
+            console.log("HI");
+            f = await transactionsModel
+            .find({ TRX_DATE: { $gt: start, $lt: end },DISTRIBUTOR:key_n[1] })
             .lean();
+        }
+        else
+        {
+            f = await transactionsModel
+            .find({ TRX_DATE: { $gt: start, $lt: end },DISTRIBUTOR:key_n[1],FOLIO_NO:folio })
+            .lean();
+        }
 
         if (f.length < 1) {
           return res.status(404).json({ success:false,status:404,message: "No Folios Found!!" });
@@ -115,6 +128,7 @@ const folioGET = async (req, res) => {
   var Transcations = new Array();
   var finalsData= [];
   try {
+    const { start,end,folio } = req.body;
     var website = req.headers.website;
     var key = decrypt(req.headers.auth);
     var key_n = key.split("|");
@@ -135,11 +149,22 @@ const folioGET = async (req, res) => {
     var f = null;
     
 
-
-        const transactions = await transactionsModel.find({DISTRIBUTOR: key_n[1]}).lean();
+        if(folio=="all" || folio==null || folio=="")
+        {
+            
+            f = await transactionsModel
+            .find({ TRX_DATE: { $gt: start, $lt: end },DISTRIBUTOR:key_n[1] })
+            .lean();
+        }
+        else
+        {
+            f = await transactionsModel
+            .find({ TRX_DATE: { $gt: start, $lt: end },DISTRIBUTOR:key_n[1],FOLIO_NO:folio })
+            .lean();
+        }
         
 
-    res.status(200).json({status:200,success:true,records:transactions});
+    res.status(200).json({status:200,success:true,records:f});
   } catch (error) {
       console.log(error);
     res.json(error);
