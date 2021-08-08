@@ -401,7 +401,7 @@ const create = async (req, res) => {
         const findGroup = await groupModel.findOne({GROUP_TITLE:title,DISTRIBUTOR:key_n[1]});
         if(findGroup==null)
         {
-            const findInv = await investorssModel.findOne({PAN_NO:admin,DISTRIBUTOR:key_n[1]});
+            const findInv = await investorssModel.findOne({PAN_NO:admin,DISTRIBUTOR:key_n[1],INV_GROUP:"NOT ASSIGNED"});
             if(findInv==null)
             {
                 return res.status(500).json({ success:false,status:500,message: "Invalid Group Leader!!" });
