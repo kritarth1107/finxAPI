@@ -7,5 +7,6 @@ router.post("/get",groupsController.getGroups);
 router.post("/members",groupsController.members);
 router.post("/deleteMember",groupsController.deleteMember);
 router.post("/changeLeader",groupsController.changeLeader);
+router.post("/addMember",groupsController.addMember);
 
 module.exports = router;
