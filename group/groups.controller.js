@@ -256,6 +256,61 @@ const addMember = async (req,res) => {
  }
 
 
+ const deleteGP = async (req,res) => {
+    try
+    {
+        const { groupID } = req.body;
+        var website = req.headers.website;
+        var key = decrypt(req.headers.auth);
+        var key_n = key.split("|");
+        if(key_n[0]!="DISTRIBUTOR")
+        {
+            return res.status(403).json({ success:false,status:403,message: "Unauthorised Access!!" });
+        }
+
+        manageService.checkManage(website,key_n[1],1).then(result=>{
+            if(result==null)
+            {
+                return res.status(403).json({ success:false,status:403,message: "Unauthorised Access!!" });
+            }
+        }).catch(error=>{
+
+        });
+
+        const findGroup = await groupModel.findById(groupID);
+
+        if(findGroup==null)
+        {
+            return res.status(500).json({ success:false,status:500,message: "Error!!" });
+        }
+        else
+        {
+
+                    const changeT = await investorssModel.updateMany({DISTRIBUTOR:key_n[1],INV_GROUP:groupID},{
+                        INV_GROUP:"NOT ASSIGNED"
+                    });
+
+                     const deleteGroup = await groupModel.deleteOne({_id:groupID});
+
+                    return res.status(200).json({ success:true,status:200,message: "Group Removed!!" });
+
+                
+                
+            
+
+        }
+        
+
+
+    }
+    catch(error)
+    {
+        console.log(error);
+        res.json(error);
+    }
+ }
+
+
   const changeLeader = async (req,res) => {
     try
     {
@@ -394,5 +449,5 @@ const create = async (req, res) => {
 
 
 module.exports = {
-    create,getGroups,members,deleteMember,changeLeader,addMember
+    create,getGroups,members,deleteMember,changeLeader,addMember,deleteGP
 }
