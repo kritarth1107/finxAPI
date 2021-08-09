@@ -52,8 +52,7 @@ const transactionsGETx = async (req, res) => {
         var f =null;
 
         if(folio=="all" || folio==null || folio=="")
-        {
-            console.log("HI");
+        { 
             f = await transactionsModel
             .find({ TRX_DATE: { $gt: start, $lt: end },DISTRIBUTOR:key_n[1] })
             .lean();
