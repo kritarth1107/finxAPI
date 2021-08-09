@@ -7,5 +7,6 @@ router.post("/create",investorsController.create);
 router.post("/get",investorsController.get);
 router.post("/get/one",investorsController.getOne);
 router.post("/host",investorsController.checkHost);
+router.post("/update",investorsController.updateInv);
 
 module.exports = router;

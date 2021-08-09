@@ -460,4 +460,78 @@ const checkHost = async(req,res)=>{
     }
 }
 
-module.exports = {login,changePassword,create,get,getOne,checkHost}
+const updateInv = async(req,res) => {
+    try
+        {
+            var body = req.body;
+            var headers = req.headers;
+            var website = headers.website;
+            body.password = md5(body.password);
+            var old_password = body.old_password;
+            const manage = await managesModel.findOne({mWebsite:website,mFlag:1}).lean();
+            if(manage==null)
+            {
+                res.json({
+                    success:false,
+                    status:500,
+                    message:"Invalid Host"
+                });
+            }
+
+
+            var key = decrypt(headers.auth);
+            var key_n = key.split("|");
+            if(key_n[0]!="CLIENT")
+            {
+                return res.status(403).json({ success:false,status:403,message: "Unauthorised Access!!" });
+            }
+
+            const invCheck = await investorssModel.findById(key_n[1]).lean();
+            if(invCheck==null)
+            {
+                return res.status(403).json({ success:false,status:403,message: "Unauthorised Access: Invalid Client" });
+            }
+            
+
+
+            const invUpdate = await investorssModel.findByIdAndUpdate(key_n[1],
+                {INV_NAME:body.INV_NAME,
+MOBILE_NO:body.MOBILE_NO,
+OCCUPATION:body.OCCUPATION,
+EMAIL:body.EMAIL,
+ADDRESS1:body.ADDRESS1,
+ADDRESS2:body.ADDRESS2,
+ADDRESS3:body.ADDRESS3,
+LASTUPDATE:body.DATE}
+                );
+            
+            if(invUpdate==null)
+            {
+                
+                res.status(500).json({
+                    status:500,
+                    success:false,
+                    message:"Failed to update profile!!"
+                });
+            }
+            else
+            {
+                res.status(500).json({
+                    status:200,
+                    success:true,
+                    message:"Successfully updatedd!!"
+                });
+            }
+        }
+        catch(error)
+        {
+            //console.log(error);
+            res.status(500).json({
+                status:500,
+                success:false,
+                message:"Something went Wrong"
+            });
+        }
+}
+
+module.exports = {login,changePassword,create,get,getOne,checkHost,updateInv}

@@ -527,7 +527,7 @@ const folioClientSingle = async (req, res) => {
         var f = await folioModel
                     .find({
                         DISTRIBUTOR: invCheck.DISTRIBUTOR,
-                        PAN_NO: invCheck.PAN_NO
+                        PAN_NO: invCheck.PAN_NO,
                         FOLIOCHK: FOLIO_NO
                     })
                     .lean();
