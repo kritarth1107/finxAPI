@@ -8,5 +8,6 @@ router.post("/get",investorsController.get);
 router.post("/get/one",investorsController.getOne);
 router.post("/host",investorsController.checkHost);
 router.post("/update",investorsController.updateInv);
+router.post("/d/update",investorsController.updateInvDistributor);
 
 module.exports = router;

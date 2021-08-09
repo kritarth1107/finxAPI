@@ -534,4 +534,79 @@ LASTUPDATE:body.DATE}
         }
 }
 
-module.exports = {login,changePassword,create,get,getOne,checkHost,updateInv}
+const updateInvDistributor = async(req,res)=>{
+    try
+    {
+        const header = req.headers;
+        var website = header.website;
+        var key = decrypt(header.auth);
+        var key_n = key.split("|");
+        var records = [];
+        if(key_n[0]!="DISTRIBUTOR")
+        {
+            return res.status(403).json({ success:false,status:403,message: "Unauthorised Access!!" });
+        }
+        const manage = await managesModel.findOne({mWebsite:website,mFlag:1,mKey:key_n[1]}).lean();
+        if(manage==null)
+        {
+            res.json({
+                success:false,
+                status:500,
+                message:"Invalid Host"
+            });
+        }
+
+        const getInv = await investorssModel.findOne({PAN_NO:body.PAN_NO,DISTRIBUTOR:key_n[1]});
+        if(getInv==null)
+        {
+            res.json({
+                success:false,
+                status:500,
+                message:"No Investor(s)",
+                records:records
+            });
+        }
+        else
+        {
+            
+           const invUpdate = await investorssModel.findByOneAndUpdate({PAN_NO:body.PAN_NO},
+                {INV_NAME:body.INV_NAME,
+MOBILE_NO:body.MOBILE_NO,
+OCCUPATION:body.OCCUPATION,
+EMAIL:body.EMAIL,
+ADDRESS1:body.ADDRESS1,
+ADDRESS2:body.ADDRESS2,
+ADDRESS3:body.ADDRESS3,
+LASTUPDATE:body.DATE}
+                );
+            
+            if(invUpdate==null)
+            {
+                
+                res.status(500).json({
+                    status:500,
+                    success:false,
+                    message:"Failed to update profile!!"
+                });
+            }
+            else
+            {
+                res.status(500).json({
+                    status:200,
+                    success:true,
+                    message:"Successfully updatedd!!"
+                });
+            }
+        }
+    }
+    catch(error)
+    {
+        res.json({
+            success:false,
+            status:500,
+            message:error
+        });
+    }
+}
+
+module.exports = {login,changePassword,create,get,getOne,checkHost,updateInv,updateInvDistributor}
