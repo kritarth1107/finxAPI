@@ -365,7 +365,7 @@ const folioClient = async (req, res) => {
 
         });
         var f = null;
-        if (amc == "" || amc == " " || amc == "all") {
+        if (amc == "" || amc == " " || amc == "all") { 
             if (category == "" || category == " " || category == "all") {
                 var f = await folioModel
                     .find({
@@ -416,6 +416,7 @@ const folioClient = async (req, res) => {
             var SCH_AMC = f[i].SCH_AMC.toLowerCase();
             var SCH_CATEGORY = f[i].SCH_CATEGORY.toLowerCase();
             var SCH_IISN = f[i].SCH_IISN;
+            var PRODUCT = f[i].PRODUCT;
             /*const NAV_API = await fetch('https://api.mfapi.in/mf/'+SCH_CODE);
               const myJson = await NAV_API.json();
       
@@ -433,6 +434,7 @@ const folioClient = async (req, res) => {
 
             const transactions = await transModel.find({
                 FOLIO_NO: FOLIONO,
+                PRODCODE: PRODUCT,
                 DISTRIBUTOR: invCheck.DISTRIBUTOR
             }).lean();
 
