@@ -3,6 +3,7 @@ const managesService = require("../manage/manages.service");
 const managesModel = require("../manage/manages.model");
 const investorssModel = require("../investors/investors.model");
 const optionssModel = require("../manage/options.model");
+const bliingsModel = require("../manage/bliings.model");
 const md5 = require('md5');
 
 const crypto = require('crypto');
