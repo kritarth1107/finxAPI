@@ -214,6 +214,7 @@ const checkHost = async(req,res)=>{
                         res.json({
                         success:false,
                         status:402,
+                        va:today,
                         message:"Looks Like the subscription for the service has expired, contact administration to renew."
                         });
                     }
