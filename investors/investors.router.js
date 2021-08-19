@@ -9,5 +9,6 @@ router.post("/get/one",investorsController.getOne);
 router.post("/host",investorsController.checkHost);
 router.post("/update",investorsController.updateInv);
 router.post("/d/update",investorsController.updateInvDistributor);
+router.post("/chnage-theme",investorsController.chnageTheme);
 
 module.exports = router;
