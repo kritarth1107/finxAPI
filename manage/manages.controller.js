@@ -2,6 +2,7 @@ const managesService = require("./manages.service");
 const managesModel = require("./manages.model");
 const logsModel = require("./logs.model");
 const optionsModel = require("./options.model");
+const bliingsModel = require("./bliings.model");
 const md5 = require('md5');
 const crypto = require('crypto');
 require("dotenv").config();
@@ -162,22 +163,63 @@ const checkHost = async(req,res)=>{
             {
                 res.json({
                     success:false,
-                    status:69,
-                    message:"Invalid Host"
+                    status:500,
+                    message:"Looks like it has invalid host to access the page you were looking for."
                 });
             }
             else
             {
+
+                const checkValidity = await bliingsModel.findOne({DISTRIBUTOR:result.mKey});
+                if(checkValidity==null)
+                {
+                    res.json({
+                        success:false,
+                        status:500,
+                        message:"Looks like you are not authorised to access the page you were looking for."
+                    });
+                }
+                else
+                {
+                    var today = new Date();
+                    var dd = today.getDate();
+
+                    var mm = today.getMonth()+1; 
+                    var yyyy = today.getFullYear();
+                    if(dd<10) 
+                    {
+                        dd='0'+dd;
+                    } 
+
+                    if(mm<10) 
+                    {
+                        mm='0'+mm;
+                    } 
+                    today = yyyy+mm+dd;
+
+                    if(parseInt(today)>=parseInt(checkValidity.VALIDITY))
+                    {
+                            res.json({
+                        success:true,
+                        status:200,
+                        mEmail:result.mEmail,
+                        mMobile:result.mMobile,
+                        mBusiness:result.mBusiness,
+                        mWebsite:result.mWebsite,
+                        mPerson:result.mPerson
+                        });
+                    }
+                    else
+                    {
+                        res.json({
+                        success:false,
+                        status:402,
+                        message:"Looks Like the subscription for the service has expired, contact administration to renew."
+                        });
+                    }
+                }
                 
-                res.json({
-                    success:true,
-                    status:200,
-                    mEmail:result.mEmail,
-                    mMobile:result.mMobile,
-                    mBusiness:result.mBusiness,
-                    mWebsite:result.mWebsite,
-                    mPerson:result.mPerson
-                });
+                
             }
         });
 
