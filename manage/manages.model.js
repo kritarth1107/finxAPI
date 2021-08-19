@@ -34,6 +34,14 @@ const manageSchema = new Schema({
         type:String,
         required:true   
     },
+    mlogo:{
+        type:String,
+        required:true   
+    },
+    mLogoLight:{
+        type:String,
+        required:true   
+    },
     mMobile:{
         type:String,
         required: [true, 'User phone number required']
