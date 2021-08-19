@@ -206,6 +206,7 @@ const checkHost = async(req,res)=>{
                         mMobile:result.mMobile,
                         mBusiness:result.mBusiness,
                         mWebsite:result.mWebsite,
+                        mValidity:checkValidity.VALIDITY,
                         mPerson:result.mPerson
                         });
                     }
