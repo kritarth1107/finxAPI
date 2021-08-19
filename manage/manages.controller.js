@@ -158,29 +158,29 @@ const checkHost = async(req,res)=>{
             logUser:header.auth
         });
         const addLog = await logsModel.create(data);
-        managesService.checkHost(header.website,1).then(result=>{
-            if(result==null)
-            {
-                res.json({
+
+        const result = await managesModel.findOne({mWebsite:header.website,mFlag:1});
+        if(result==null)
+        {
+            res.json({
                     success:false,
                     status:500,
                     message:"Looks like it has invalid host to access the page you were looking for."
                 });
-            }
-            else
+        }
+        else
+        {
+            const checkValidity = await bliingsModel.findOne({DISTRIBUTOR:result.mKey});
+            if(checkValidity==null)
             {
-
-                const checkValidity = await bliingsModel.findOne({DISTRIBUTOR:result.mKey});
-                if(checkValidity==null)
-                {
-                    res.json({
+                res.json({
                         success:false,
                         status:500,
                         message:"Looks like you are not authorised to access the page you were looking for."
                     });
-                }
-                else
-                {
+            }
+            else
+            {
                     var today = new Date();
                     var dd = today.getDate();
 
@@ -217,11 +217,8 @@ const checkHost = async(req,res)=>{
                         message:"Looks Like the subscription for the service has expired, contact administration to renew."
                         });
                     }
-                }
-                
-                
             }
-        });
+        }
 
 
          
