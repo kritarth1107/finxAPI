@@ -466,8 +466,7 @@ const updateInv = async(req,res) => {
             var body = req.body;
             var headers = req.headers;
             var website = headers.website;
-            body.password = md5(body.password);
-            var old_password = body.old_password;
+            
             const manage = await managesModel.findOne({mWebsite:website,mFlag:1}).lean();
             if(manage==null)
             {
@@ -492,7 +491,10 @@ const updateInv = async(req,res) => {
                 return res.status(403).json({ success:false,status:403,message: "Unauthorised Access: Invalid Client" });
             }
             
-
+            if(body.INV_NAME===null || body.MOBILE_NO===null || body.OCCUPATION===null || body.EMAIL===null || body.ADDRESS1===null || body.ADDRESS2===null ||body.DATE===null)
+            {
+                return res.status(500).json({ success:false,status:500,message: "Missing Parameters or Blank Parameters" });
+            }
 
             const invUpdate = await investorssModel.findByIdAndUpdate(key_n[1],
                 {INV_NAME:body.INV_NAME,
@@ -516,16 +518,16 @@ LASTUPDATE:body.DATE}
             }
             else
             {
-                res.status(500).json({
+                res.status(200).json({
                     status:200,
                     success:true,
-                    message:"Successfully updatedd!!"
+                    message:"Successfully updated!!"
                 });
             }
         }
         catch(error)
         {
-            console.log(error);
+            //console.log(error);
             res.status(500).json({
                 status:500,
                 success:false,
