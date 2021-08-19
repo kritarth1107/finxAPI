@@ -197,7 +197,7 @@ const checkHost = async(req,res)=>{
                     } 
                     today = yyyy+mm+dd;
 
-                    if(parseInt(today)>=parseInt(checkValidity.VALIDITY))
+                    if(parseInt(today)<=parseInt(checkValidity.VALIDITY))
                     {
                             res.json({
                         success:true,
