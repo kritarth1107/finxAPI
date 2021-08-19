@@ -34,7 +34,7 @@ const manageSchema = new Schema({
         type:String,
         required:true   
     },
-    mlogo:{
+    mLogo:{
         type:String,
         required:true   
     },
