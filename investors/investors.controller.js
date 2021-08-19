@@ -491,7 +491,7 @@ const chnageTheme = async(req,res) =>{
                 return res.status(403).json({ success:false,status:403,message: "Unauthorised Access: Invalid Client" });
             }
 
-            const changeT = await optionsModel.findOneAndUpdate({DISTRIBUTOR:key_n[1],option_type:"CLIENTTHEME"},{
+            const changeT = await optionssModel.findOneAndUpdate({DISTRIBUTOR:key_n[1],option_type:"CLIENTTHEME"},{
                 leftSideBarTheme:body.leftSideBarTheme,
                 darkMode:body.darkMode
             });
@@ -515,7 +515,7 @@ const chnageTheme = async(req,res) =>{
     }
     catch(error)
         {
-            console.log(error);
+            //console.log(error);
             res.status(500).json({
                 status:500,
                 success:false,
