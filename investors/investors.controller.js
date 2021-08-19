@@ -460,6 +460,70 @@ const checkHost = async(req,res)=>{
     }
 }
 
+const chnageTheme = async(req,res) =>{
+    try
+    {
+            var body = req.body;
+            var headers = req.headers;
+            var website = headers.website;
+            
+            const manage = await managesModel.findOne({mWebsite:website,mFlag:1}).lean();
+            if(manage==null)
+            {
+                res.json({
+                    success:false,
+                    status:500,
+                    message:"Invalid Host"
+                });
+            }
+
+
+            var key = decrypt(headers.auth);
+            var key_n = key.split("|");
+            if(key_n[0]!="CLIENT")
+            {
+                return res.status(403).json({ success:false,status:403,message: "Unauthorised Access!!" });
+            }
+
+            const invCheck = await investorssModel.findById(key_n[1]).lean();
+            if(invCheck==null)
+            {
+                return res.status(403).json({ success:false,status:403,message: "Unauthorised Access: Invalid Client" });
+            }
+
+            const changeT = await optionsModel.findOneAndUpdate({DISTRIBUTOR:key_n[1],option_type:"CLIENTTHEME"},{
+                leftSideBarTheme:body.leftSideBarTheme,
+                darkMode:body.darkMode
+            });
+            if(changeT==null)
+            {
+                res.status(500).json({
+                    success:false,
+                    status:500,
+                    message:"Failed to update Theme"
+                });
+            }
+            else
+            {
+                res.status(200).json({
+                    success:true,
+                    status:200,
+                    message:"Theme Updated!!"
+                });
+            }
+
+    }
+    catch(error)
+        {
+            //console.log(error);
+            res.status(500).json({
+                status:500,
+                success:false,
+                message:"Something went Wrong"
+            });
+        }
+}
+
 const updateInv = async(req,res) => {
     try
         {
@@ -611,4 +675,4 @@ LASTUPDATE:body.DATE}
     }
 }
 
-module.exports = {login,changePassword,create,get,getOne,checkHost,updateInv,updateInvDistributor}
+module.exports = {login,changePassword,create,get,getOne,checkHost,updateInv,updateInvDistributor,chnageTheme}
