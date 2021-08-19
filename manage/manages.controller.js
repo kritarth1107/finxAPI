@@ -205,6 +205,8 @@ const checkHost = async(req,res)=>{
                         mEmail:result.mEmail,
                         mMobile:result.mMobile,
                         mBusiness:result.mBusiness,
+                        mLogo:result.mLogo,
+                        mLogoLight:result.mLogoLight,
                         mWebsite:result.mWebsite,
                         mValidity:checkValidity.VALIDITY,
                         mPerson:result.mPerson
