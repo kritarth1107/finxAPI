@@ -109,7 +109,7 @@ const deleteFolio = async(req,res) => {
                 message: "Something went Wrong!!"
             });
         }
-    }
+    
 
 }
 const folioGET = async (req, res) => {
