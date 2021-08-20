@@ -51,6 +51,67 @@ function getNAV(SCHCODE) {
     });
     return navData;
 }
+
+const deleteFolio = async(req,res) => {
+
+    try {
+        const {
+            FID
+        } = req.body;
+        var website = req.headers.website;
+        var key = decrypt(req.headers.auth);
+        var key_n = key.split("|");
+        if (key_n[0] != "DISTRIBUTOR") {
+            return res.status(403).json({
+                success: false,
+                status: 403,
+                message: "Unauthorised Access!!"
+            });
+        }
+
+        manageService.checkManage(website, key_n[1], 1).then(result => {
+            if (result == null) {
+                return res.status(403).json({
+                    success: false,
+                    status: 403,
+                    message: "Unauthorised Access!!"
+                });
+            }
+        }).catch(error => {
+            return res.status(500).json({
+                success: false,
+                status: 500,
+                message: "Something went Wrong"
+            });
+
+        });
+
+        const deleteFolio = await folioModel.deleteOne({_id:FID});
+        const findFolio  = await folioModel.findById(FID);
+        if(findFolio==null)
+        {
+            return res.status(200).json({ success:true,status:200,message: "Folio Removed!!" });
+        }
+        else
+        {
+            return res.status(500).json({ success:true,status:500,message: "Failed to remove Folio!!" });
+        }
+
+
+
+
+    }
+    catch (error) {
+        console.log(error);
+        return res.status(500).json({
+                success: false,
+                status: 500,
+                message: "Something went Wrong!!"
+            });
+        }
+    }
+
+}
 const folioGET = async (req, res) => {
     var Transcations = new Array();
     var finalsData = [];
@@ -551,6 +612,7 @@ const folioClientSingle = async (req, res) => {
             var SCH_AMC = f[i].SCH_AMC.toLowerCase();
             var SCH_CATEGORY = f[i].SCH_CATEGORY.toLowerCase();
             var SCH_IISN = f[i].SCH_IISN;
+            var PRODUCT = f[i].PRODUCT;
             /*const NAV_API = await fetch('https://api.mfapi.in/mf/'+SCH_CODE);
               const myJson = await NAV_API.json();
       
@@ -568,6 +630,7 @@ const folioClientSingle = async (req, res) => {
 
             const transactions = await transModel.find({
                 FOLIO_NO: FOLIONO,
+                PRODCODE: PRODUCT,
                 DISTRIBUTOR: invCheck.DISTRIBUTOR
             }).lean();
 
@@ -623,5 +686,6 @@ module.exports = {
     folioGET,
     folioClient,
     folioGETsingle,
-    folioClientSingle
+    folioClientSingle,
+    deleteFolio
 }
