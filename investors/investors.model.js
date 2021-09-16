@@ -69,7 +69,7 @@ const investorsSchema = new Schema({
     AC_NO:{
         type:String,
         required:true   
-    },,
+    },
     HOLDING_NA:{
         type:String,
         required:true   
