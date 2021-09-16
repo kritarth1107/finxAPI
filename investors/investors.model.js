@@ -54,6 +54,26 @@ const investorsSchema = new Schema({
         type:String,
         required:true   
     },
+    BANK_NAME:{
+        type:String,
+        required:true   
+    },
+    BRANCH:{
+        type:String,
+        required:true   
+    },
+    AC_TYPE:{
+        type:String,
+        required:true   
+    },
+    AC_NO:{
+        type:String,
+        required:true   
+    },,
+    HOLDING_NA:{
+        type:String,
+        required:true   
+    },
     CRDATE:{
         type:String,
         required:true   
@@ -89,7 +109,11 @@ const investorsSchema = new Schema({
     INV_FLAG:{
         type:String,
         required:true   
-    }
+    },
+    UCC:{
+        type:String,
+        required:true   
+    },
 });
 
 const Users = mongoose.model("investors",investorsSchema);

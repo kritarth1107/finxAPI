@@ -58,22 +58,6 @@ const foliosSchema = new Schema({
         type:String,
         required:true   
     },
-    BANK_NAME:{
-        type:String,
-        required:true   
-    },
-    BRANCH:{
-        type:String,
-        required:true   
-    },
-    AC_TYPE:{
-        type:String,
-        required:true   
-    },
-    AC_NO:{
-        type:String,
-        required:true   
-    },
     NOM_1:{
         type:String,
         required:true   
