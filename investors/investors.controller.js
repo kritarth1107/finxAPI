@@ -193,6 +193,70 @@ const create = async(req,res)=>{
         });
     }
 
+    const inv = await investorssModel.findOne({PAN_NO:body.PAN_NO,DISTRIBUTOR:key_n[1]}).lean();
+    if(manage==null)
+    {
+        var dataINV = ({
+                INV_NAME:body.INV_NAME,
+                ADDRESS1:body.ADDRESS1,
+                ADDRESS2:body.ADDRESS2,
+                ADDRESS3:body.ADDRESS3,
+                CITY:body.CITY,
+                PINCODE:body.PINCODE,
+                INV_DOB:body.INV_DOB,
+                MOBILE_NO:body.MOBILE_NO,
+                OCCUPATION:body.OCCUPATION,
+                EMAIL:body.EMAIL,
+                PAN_NO:body.PAN_NO,
+                AADHAAR:body.AADHAAR,
+                PASSWORD:password,
+                BANK_NAME:body.BANK_NAME,
+                BRANCH:body.BRANCH,
+                AC_TYPE:body.AC_TYPE,
+                AC_NO:body.AC_NO,
+                CRDATE:body.CRDATE,
+                CREATEDON:body.DATE,
+                LASTUPDATE:body.DATE,
+                PWD_UPD:body.DATE,
+                HOLDING_NA:body.HOLDING_NA,
+                INV_APP:"NONE",
+                UCC:body.UCC,
+                INV_GROUP:"NOT ASSIGNED",
+                DISTRIBUTOR:key_n[1],
+                INV_PROFILE:"https://quadkubes.com/images/profile-image.jpg",
+                INV_FLAG:"1"
+            });
+        const newINV = await investorssModel.create(dataINV);
+        if(newINV==null)
+                {
+                  res.json({
+                        success:false,
+                        status:500,
+                        message:"Failed to create investor profile"
+                    });  
+                }
+                else
+                {
+                    res.json({
+                        success:false,
+                        status:200,
+                        message:"Profile created Successfully",
+                        pancard:body.PAN_NO
+                    });  
+                }
+
+
+    }
+    else
+    {
+        res.json({
+            success:false,
+            status:500,
+            message:"PAN "+body.PAN_NO+" already registered!"
+        });
+    }
+
+
 }
 
 const getOne = async(req,res)=>{
