@@ -1,11 +1,22 @@
 const schemesService = require("./schemes.service");
 const schemesmodel = require("./schemes.model");
+const parametersModel = require("../parameters/parameters.model");
 
 
-const getALlAMC = async (req,res)=>{
+const getParameters = async (req,res)=>{
     // /const amc = schemesmodel.find
+        const parametersX = await parametersModel.find();
+        if(parametersX.length>0)
+        {
+            return res.status(200).json({ success:true,status:200,message: "Parameters!!",parameters:parametersX });
+        }
+        else
+        {
+            return res.status(500).json({ success:true,status:500,message: "No Parameters Found!!" });
+        }
 }
 module.exports = {
+    getParameters,
     getAllSchemes:(req,res)=>{
         schemesService.list().then(result=>{
             if(result.length==0)
