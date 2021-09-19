@@ -214,6 +214,14 @@ const folioGET = async (req, res) => {
                 }]
             });
 
+            if(navData!=null)
+            {
+                NAV_DATE = navData.NAV_DATE;
+                NAV_PRICE = navData.NAV;
+            }
+
+
+
 
             const transactions = await transModel.find({
                 FOLIO_NO: FOLIONO,
@@ -223,8 +231,8 @@ const folioGET = async (req, res) => {
 
 
             var upds = ({
-                NAV_PRICE: navData.NAV,
-                NAV_DATE: navData.NAV_DATE,
+                NAV_PRICE: NAV_PRICE,
+                NAV_DATE: NAV_DATE,
                 FOLIONO: f[i].FOLIOCHK,
                 BROKER_COD: f[i].BROKER_COD,
                 SCH_CODE: f[i].SCH_CODE,
