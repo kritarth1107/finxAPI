@@ -107,7 +107,18 @@ const main  = async (req, res) => {
             var SCH_AMC = "";
             var SCH_CATEGORY = "";
             const checkScheme = await schemesModel.findOne({productCode:obj[j].PRODUCT});
-            if(checkScheme!=null)
+            if(obj[j].PAN_NO==="" || obj[j].PAN_NO===" " || obj[j].PAN_NO==null)
+            {
+                        var upDATA = ({
+                                    status:false,
+                                    identity:obj[j].PAN_NO+" | "+obj[j].INV_NAME+" | "+obj[j].FOLIOCHK,
+                                    message:"PAN CARD Not Available"
+                                });
+                                opARRAY.push(upDATA);
+            }
+            else
+            {
+                if(checkScheme!=null)
             {
                 SCH_CODE = checkScheme.schemeCode;
                 SCH_IISN = checkScheme.productIISN;
@@ -253,6 +264,7 @@ const main  = async (req, res) => {
                                 message:"Failed to Scheme Details"
                             });
                             opARRAY.push(upDATA);
+            }
             }
             
         }
