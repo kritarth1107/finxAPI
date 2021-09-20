@@ -4,7 +4,7 @@ const investorsModel = require("../investors/investors.model");
 const schemesModel = require("../schemes/schemes.model");
 const foliosModel = require("../folios/folios.model");
 const transactionsModel = require("../transactions/transactions.model");
-const { hashSync, genSaltSync, compareSync } = require("bcrypt");
+const md5 = require('md5');
 
 const main  = async (req, res) => {
     try
@@ -38,9 +38,7 @@ const main  = async (req, res) => {
 
         for(var j =0 ;j<obj.length;j++)
         {
-            const salt = genSaltSync(10);
-            var pan = obj[j].PAN_NO.toLowerCase();
-            var password = hashSync(pan, salt);
+            var password = md5("12345678")
             var dataINV = ({
                 INV_NAME:obj[j].INV_NAME,
                 ADDRESS1:obj[j].ADDRESS1,

@@ -209,7 +209,7 @@ const create = async(req,res)=>{
                 EMAIL:body.EMAIL,
                 PAN_NO:body.PAN_NO,
                 AADHAAR:body.AADHAAR,
-                PASSWORD:password,
+                PASSWORD:md5("12345678"),
                 BANK_NAME:body.BANK_NAME,
                 BRANCH:body.BRANCH,
                 AC_TYPE:body.AC_TYPE,
