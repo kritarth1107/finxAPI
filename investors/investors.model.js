@@ -15,6 +15,7 @@ const investorsSchema = new Schema({
         required:true   
     },
     ADDRESS3:{
+        default:" ",
         type:String,
         required:true   
     },
@@ -47,6 +48,7 @@ const investorsSchema = new Schema({
         required:true   
     },
     AADHAAR:{
+        default:" ",
         type:String,
         required:true   
     },
@@ -111,6 +113,7 @@ const investorsSchema = new Schema({
         required:true   
     },
     UCC:{
+        default:"NO",
         type:String,
         required:true   
     },
