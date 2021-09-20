@@ -7,12 +7,12 @@ const investorsSchema = new Schema({
         required:true   
     },
     ADDRESS1:{
-        type:String,
-        required:true   
+        default:" ",
+        type:String,   
     },
     ADDRESS2:{
+        default:" ",
         type:String,
-        required:true   
     },
     ADDRESS3:{
         default:" ",
