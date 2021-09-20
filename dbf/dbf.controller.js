@@ -34,13 +34,8 @@ const main  = async (req, res) => {
         var updated = 0;
         var opARRAY = [];
 
-        res.json({
-                success:false,
-                status:403,
-                message:"Invalid Host"
-            });
-
         
+
         for(var j =0 ;j<obj.length;j++)
         {
             const salt = genSaltSync(10);
@@ -239,8 +234,7 @@ const main  = async (req, res) => {
         console.log(error);
         res.status(500).json({
             success:false,
-            status:500,
-            message:error.toString()
+            status:500
         })
     }
     
