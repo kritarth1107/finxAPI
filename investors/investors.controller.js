@@ -370,7 +370,7 @@ const get = async(req,res)=>{
                     CITY:getAll[i].CITY,
                     MOBILE_NO:getAll[i].MOBILE_NO,
                     EMAIL:getAll[i].EMAIL,
-                UCC:getAll.UCC,
+                    UCC:getAll[i].UCC,
                     PAN_NO:getAll[i].PAN_NO
                 });
                 records.push(x);
