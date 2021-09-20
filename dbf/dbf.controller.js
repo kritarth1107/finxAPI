@@ -33,6 +33,14 @@ const main  = async (req, res) => {
         var total_count = 0;
         var updated = 0;
         var opARRAY = [];
+
+        res.json({
+                success:false,
+                status:403,
+                message:"Invalid Host"
+            });
+
+        
         for(var j =0 ;j<obj.length;j++)
         {
             const salt = genSaltSync(10);
