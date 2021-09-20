@@ -56,19 +56,19 @@ const investorsSchema = new Schema({
     },
     BANK_NAME:{
         type:String,
-        required:true   
+        default:"NOT PROVIDED"  
     },
     BRANCH:{
         type:String,
-        required:true   
+        default:"NOT PROVIDED"   
     },
     AC_TYPE:{
         type:String,
-        required:true   
+        default:"SA"   
     },
     AC_NO:{
         type:String,
-        required:true   
+        default:"NOT PROVIDED"  
     },
     HOLDING_NA:{
         default:"SI",
