@@ -64,11 +64,7 @@ const main  = async (req, res) => {
         var updated = 0;
         var opARRAY = [];
 
-        res.json({
-                success:false,
-                status:403,
-                message:"Invalid Host"
-            });
+        
 
         
 
@@ -118,8 +114,8 @@ const main  = async (req, res) => {
                 SCH_NAME = checkScheme.fundName;
                 SCH_AMC = checkScheme.fundAMC;
                 SCH_CATEGORY = checkScheme.fundCategory;
-            }
-            var dataFolio = ({
+
+                var dataFolio = ({
                 BROKER_COD:obj[j].BROKER_COD,
                 FOLIOCHK:obj[j].FOLIOCHK,
                 PAN_NO:obj[j].PAN_NO,
@@ -141,29 +137,74 @@ const main  = async (req, res) => {
                 LASTUPDATE:obj[j].CREATEDON,
                 DISTRIBUTOR:key_n[1],
                 FOLIO_FLAG:"1"
-            });
+                 });
 
 
-            const checkINV = await  investorsModel.findOne({PAN_NO:pan,DISTRIBUTOR:key_n[1]});
-            if(checkINV==null)
-            {
-                //NEW INVESTOR HERE
-                const newINV = await investorsModel.create(dataINV);
-                if(newINV==null)
+                const checkINV = await  investorsModel.findOne({PAN_NO:obj[j].PAN_NO,DISTRIBUTOR:key_n[1]});
+                if(checkINV==null)
                 {
-                    var upDATA = ({
-                        status:false,
-                        identity:pan+" | "+obj[j].INV_NAME,
-                        message:"Failed to create Investor"
-                    });
-                    opARRAY.push(upDATA);
+                    //NEW INVESTOR HERE
+                    const newINV = await investorsModel.create(dataINV);
+                    if(newINV==null)
+                    {
+                        var upDATA = ({
+                            status:false,
+                            identity:pan+" | "+obj[j].INV_NAME,
+                            message:"Failed to create Investor"
+                        });
+                        opARRAY.push(upDATA);
+                    }
+                    else
+                    {
+                        //Add Folio
+                        const checkFolio  = await foliosModel.findOne({
+                            DISTRIBUTOR:key_n[1],
+                            PAN_NO:pan,
+                            FOLIOCHK:obj[j].FOLIOCHK,
+                            FOLIO_DATE:obj[j].FOLIO_DATE,
+                            PRODUCT:obj[j].PRODUCT
+                        });
+                        if(checkFolio==null)
+                        {
+                            const newFolio = await foliosModel.create(dataFolio);
+                            if(newFolio==null)
+                            {
+                                var upDATA = ({
+                                    status:false,
+                                    identity:pan+" | "+obj[j].INV_NAME+" | "+obj[j].FOLIOCHK,
+                                    message:"Failed to create Folio"
+                                });
+                                opARRAY.push(upDATA);
+                            }
+                            else
+                            {
+                                var upDATA = ({
+                                    status:true,
+                                    identity:pan+" | "+obj[j].INV_NAME+" | "+obj[j].FOLIOCHK,
+                                    message:"Folio Added : New Investor"
+                                });
+                                opARRAY.push(upDATA);
+                                updated++;
+                            }
+                        }
+                        else
+                        {
+                            var upDATA = ({
+                                status:false,
+                                identity:pan+" | "+obj[j].INV_NAME+" | "+obj[j].FOLIOCHK,
+                                message:"Folio Already Exists"
+                            });
+                            opARRAY.push(upDATA);
+                        }
+                    }
                 }
                 else
                 {
+                    //Investor Exists
                     //Add Folio
                     const checkFolio  = await foliosModel.findOne({
                         DISTRIBUTOR:key_n[1],
-                        PAN_NO:pan,
+                        PAN_NO:obj[j].PAN_NO,
                         FOLIOCHK:obj[j].FOLIOCHK,
                         FOLIO_DATE:obj[j].FOLIO_DATE,
                         PRODUCT:obj[j].PRODUCT
@@ -175,7 +216,7 @@ const main  = async (req, res) => {
                         {
                             var upDATA = ({
                                 status:false,
-                                identity:pan+" | "+obj[j].INV_NAME+" | "+obj[j].FOLIOCHK,
+                                identity:obj[j].PAN_NO+" | "+obj[j].INV_NAME+" | "+obj[j].FOLIOCHK,
                                 message:"Failed to create Folio"
                             });
                             opARRAY.push(upDATA);
@@ -184,8 +225,8 @@ const main  = async (req, res) => {
                         {
                             var upDATA = ({
                                 status:true,
-                                identity:pan+" | "+obj[j].INV_NAME+" | "+obj[j].FOLIOCHK,
-                                message:"Folio Added : New Investor"
+                                identity:obj[j].PAN_NO+" | "+obj[j].INV_NAME+" | "+obj[j].FOLIOCHK,
+                                message:"Folio Added"
                             });
                             opARRAY.push(upDATA);
                             updated++;
@@ -195,59 +236,25 @@ const main  = async (req, res) => {
                     {
                         var upDATA = ({
                             status:false,
-                            identity:pan+" | "+obj[j].INV_NAME+" | "+obj[j].FOLIOCHK,
+                            identity:obj[j].PAN_NO+" | "+obj[j].INV_NAME+" | "+obj[j].FOLIOCHK,
                             message:"Folio Already Exists"
                         });
                         opARRAY.push(upDATA);
                     }
                 }
+
+                total_count++;
             }
             else
             {
-                //Investor Exists
-                //Add Folio
-                const checkFolio  = await foliosModel.findOne({
-                    DISTRIBUTOR:key_n[1],
-                    PAN_NO:pan,
-                    FOLIOCHK:obj[j].FOLIOCHK,
-                    FOLIO_DATE:obj[j].FOLIO_DATE,
-                    PRODUCT:obj[j].PRODUCT
-                });
-                if(checkFolio==null)
-                {
-                    const newFolio = await foliosModel.create(dataFolio);
-                    if(newFolio==null)
-                    {
-                        var upDATA = ({
-                            status:false,
-                            identity:pan+" | "+obj[j].INV_NAME+" | "+obj[j].FOLIOCHK,
-                            message:"Failed to create Folio"
-                        });
-                        opARRAY.push(upDATA);
-                    }
-                    else
-                    {
-                        var upDATA = ({
-                            status:true,
-                            identity:pan+" | "+obj[j].INV_NAME+" | "+obj[j].FOLIOCHK,
-                            message:"Folio Added"
-                        });
-                        opARRAY.push(upDATA);
-                        updated++;
-                    }
-                }
-                else
-                {
-                    var upDATA = ({
-                        status:false,
-                        identity:pan+" | "+obj[j].INV_NAME+" | "+obj[j].FOLIOCHK,
-                        message:"Folio Already Exists"
-                    });
-                    opARRAY.push(upDATA);
-                }
+                var upDATA = ({
+                                status:false,
+                                identity:obj[j].PAN_NO+" | "+obj[j].PRODUCT+" | "+obj[j].FOLIOCHK,
+                                message:"Failed to Scheme Details"
+                            });
+                            opARRAY.push(upDATA);
             }
-
-            total_count++;
+            
         }
         
         
@@ -265,7 +272,6 @@ const main  = async (req, res) => {
     }
     catch(error)
     {
-        console.log(error);
         res.status(500).json({
             success:false,
             status:500
