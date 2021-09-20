@@ -6,6 +6,36 @@ const foliosModel = require("../folios/folios.model");
 const transactionsModel = require("../transactions/transactions.model");
 const md5 = require('md5');
 
+
+const crypto = require('crypto');
+require("dotenv").config();
+const ENCRYPTION_KEY = process.env.ENC_KEY; // Must be 256 bits (32 characters)
+
+
+function encrypt(text) {
+    //let iv = process.env.ENC_IV;
+    let iv = crypto.randomBytes(16);
+    let cipher = crypto.createCipheriv('aes-256-cbc', Buffer.from(ENCRYPTION_KEY), iv);
+    let encrypted = cipher.update(text);
+   
+    encrypted = Buffer.concat([encrypted, cipher.final()]);
+   
+    return iv.toString('hex') + ':' + encrypted.toString('hex');
+}
+
+function decrypt(text) {
+    let textParts = text.split(':');
+    let iv = Buffer.from(textParts.shift(), 'hex');
+    let encryptedText = Buffer.from(textParts.join(':'), 'hex');
+    let decipher = crypto.createDecipheriv('aes-256-cbc', Buffer.from(ENCRYPTION_KEY), iv);
+    let decrypted = decipher.update(encryptedText);
+   
+    decrypted = Buffer.concat([decrypted, decipher.final()]);
+   
+    return decrypted.toString();
+}
+
+
 const main  = async (req, res) => {
     try
     {
