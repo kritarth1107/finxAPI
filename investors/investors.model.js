@@ -20,11 +20,13 @@ const investorsSchema = new Schema({
     },
     CITY:{
         type:String,
-        required:true   
+        default:"NOT PROVIDED"  
+ 
     },
     PINCODE:{
         type:String,
-        required:true   
+        default:"NOT PROVIDED"  
+
     },
     INV_DOB:{
         default:"NOT PROVIDED",
