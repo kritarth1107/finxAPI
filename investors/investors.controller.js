@@ -308,6 +308,7 @@ const getOne = async(req,res)=>{
                 ADDRESS3:getAll.ADDRESS3,
                 CITY:getAll.CITY,
                 PINCODE:getAll.PINCODE,
+                UCC:getAll.UCC,
                 INV_MOBILE:getAll.INV_MOBILE
             });
         }
