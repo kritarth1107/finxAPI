@@ -171,7 +171,7 @@ const main  = async (req, res) => {
                             {
                                 var upDATA = ({
                                     status:false,
-                                    identity:pan+" | "+obj[j].INV_NAME+" | "+obj[j].FOLIOCHK,
+                                    identity:obj[j].PAN_NO+" | "+obj[j].INV_NAME+" | "+obj[j].FOLIOCHK,
                                     message:"Failed to create Folio"
                                 });
                                 opARRAY.push(upDATA);
@@ -180,7 +180,7 @@ const main  = async (req, res) => {
                             {
                                 var upDATA = ({
                                     status:true,
-                                    identity:pan+" | "+obj[j].INV_NAME+" | "+obj[j].FOLIOCHK,
+                                    identity:obj[j].PAN_NO+" | "+obj[j].INV_NAME+" | "+obj[j].FOLIOCHK,
                                     message:"Folio Added : New Investor"
                                 });
                                 opARRAY.push(upDATA);
@@ -191,7 +191,7 @@ const main  = async (req, res) => {
                         {
                             var upDATA = ({
                                 status:false,
-                                identity:pan+" | "+obj[j].INV_NAME+" | "+obj[j].FOLIOCHK,
+                                identity:obj[j].PAN_NO+" | "+obj[j].INV_NAME+" | "+obj[j].FOLIOCHK,
                                 message:"Folio Already Exists"
                             });
                             opARRAY.push(upDATA);
