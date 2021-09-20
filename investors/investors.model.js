@@ -27,27 +27,27 @@ const investorsSchema = new Schema({
         required:true   
     },
     INV_DOB:{
+        default:"NOT PROVIDED",
         type:String,
-        required:true   
     },
     MOBILE_NO:{
-        type:String,
-        required:true   
+        default:"NOT PROVIDED",
+        type:String, 
     },
     OCCUPATION:{
         default:"08",
         type:String
     },
     EMAIL:{
+        default:"NOT PROVIDED",
         type:String,
-        required:true   
     },
     PAN_NO:{
         type:String,
         required:true   
     },
     AADHAAR:{
-        default:" ",
+        default:"NOT PROVIDED",
         type:String
     },
     PASSWORD:{
@@ -71,8 +71,8 @@ const investorsSchema = new Schema({
         required:true   
     },
     HOLDING_NA:{
-        type:String,
-        required:true   
+        default:"SI",
+        type:String,  
     },
     CRDATE:{
         type:String,
@@ -91,8 +91,8 @@ const investorsSchema = new Schema({
         required:true   
     },
     INV_APP:{
-        type:String,
-        required:true   
+        default:"NONE",
+        type:String, 
     },
     INV_GROUP:{
         type:String,
