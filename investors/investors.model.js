@@ -35,8 +35,8 @@ const investorsSchema = new Schema({
         required:true   
     },
     OCCUPATION:{
-        type:String,
-        required:true   
+        default:"08",
+        type:String
     },
     EMAIL:{
         type:String,
