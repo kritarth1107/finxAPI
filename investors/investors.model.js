@@ -16,8 +16,7 @@ const investorsSchema = new Schema({
     },
     ADDRESS3:{
         default:" ",
-        type:String,
-        required:true   
+        type:String
     },
     CITY:{
         type:String,
@@ -49,8 +48,7 @@ const investorsSchema = new Schema({
     },
     AADHAAR:{
         default:" ",
-        type:String,
-        required:true   
+        type:String
     },
     PASSWORD:{
         type:String,
@@ -115,7 +113,6 @@ const investorsSchema = new Schema({
     UCC:{
         default:"NO",
         type:String,
-        required:true   
     },
 });
 
