@@ -159,7 +159,7 @@ const main  = async (req, res) => {
                         //Add Folio
                         const checkFolio  = await foliosModel.findOne({
                             DISTRIBUTOR:key_n[1],
-                            PAN_NO:pan,
+                            PAN_NO:obj[j].PAN_NO,
                             FOLIOCHK:obj[j].FOLIOCHK,
                             FOLIO_DATE:obj[j].FOLIO_DATE,
                             PRODUCT:obj[j].PRODUCT
