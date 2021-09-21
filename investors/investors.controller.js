@@ -815,7 +815,7 @@ const ucc_registration = async(req,res)=>{
                 {
                     res.json({
                         success:false,
-                        status:500,
+                        status:200,
                         message:"UCC Created Successfully"
                     });
                 }
