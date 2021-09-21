@@ -310,6 +310,10 @@ const getOne = async(req,res)=>{
                 ADDRESS3:getAll.ADDRESS3,
                 CITY:getAll.CITY,
                 PINCODE:getAll.PINCODE,
+                BRANCH:getAll.BRANCH,
+                AC_NO:getAll.AC_NO,
+                HOLDING_NA:getAll.HOLDING_NA,
+                AC_TYPE:getAll.AC_TYPE,
                 UCC:getAll.UCC,
                 INV_MOBILE:getAll.INV_MOBILE
             });
