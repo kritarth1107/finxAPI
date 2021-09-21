@@ -10,5 +10,6 @@ router.post("/host",investorsController.checkHost);
 router.post("/update",investorsController.updateInv);
 router.post("/d/update",investorsController.updateInvDistributor);
 router.post("/chnage-theme",investorsController.chnageTheme);
+router.post("/ucc",investorsController.ucc_registration);
 
 module.exports = router;

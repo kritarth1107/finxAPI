@@ -5,6 +5,8 @@ const investorssModel = require("../investors/investors.model");
 const optionssModel = require("../manage/options.model");
 const bliingsModel = require("../manage/bliings.model");
 const md5 = require('md5');
+const request = require('request');
+
 
 const crypto = require('crypto');
 require("dotenv").config();
@@ -748,4 +750,97 @@ LASTUPDATE:body.DATE}
     }
 }
 
-module.exports = {login,changePassword,create,get,getOne,checkHost,updateInv,updateInvDistributor,chnageTheme}
+
+const ucc_registration = async(req,res)=>{
+    try
+    {
+        const header = req.headers;
+        const body = req.body;
+        var website = header.website;
+        var key = decrypt(header.auth);
+        var key_n = key.split("|");
+        var records = [];
+        if(key_n[0]!="DISTRIBUTOR")
+        {
+            return res.status(403).json({ success:false,status:403,message: "Unauthorised Access!!" });
+        }
+        const manage = await managesModel.findOne({mWebsite:website,mFlag:1,mKey:key_n[1]}).lean();
+        if(manage==null)
+        {
+            res.json({
+                success:false,
+                status:500,
+                message:"Invalid Host"
+            });
+        }
+
+        const getInv = await investorssModel.findOne({PAN_NO:body.PAN_NO,DISTRIBUTOR:key_n[1]});
+        if(getInv==null)
+        {
+            res.json({
+                success:false,
+                status:500,
+                message:"No Investor(s)"
+            });
+        }
+        else
+        {
+            if(getInv.UCC=="NO")
+            {
+                
+                const updateUCC = await investorssModel.findOneAndUpdate({DISTRIBUTOR:key_n[1],PAN_NO:body.PAN_NO},{
+                            ADDRESS1:body.ADDRESS1,
+                            ADDRESS2:body.ADDRESS2,
+                            ADDRESS3:body.ADDRESS3,
+                            CITY:body.CITY,
+                            PINCODE:body.PINCODE,
+                            UCC:body.PAN_NO,
+                            BRANCH:body.BRANCH,
+                            AC_TYPE:body.AC_TYPE,
+                            AC_NO:body.AC_NO
+                    });
+                if(updateUCC==null)
+                {
+                    res.json({
+                        success:false,
+                        status:500,
+                        message:"Failed to update Unique Client Code"
+                    });
+                }
+                else
+                {
+                    res.json({
+                        success:false,
+                        status:500,
+                        message:"UCC Created Successfully"
+                    });
+                }
+
+
+            }
+            else
+            {
+                    res.json({
+                        success:false,
+                        status:500,
+                        message:"UCC Already Registered"
+                    });
+            }
+                
+        }
+    }
+    catch(error)
+    {
+        console.log(error);
+        res.json({
+            success:false,
+            status:500,
+            message:error
+        });
+    }
+
+    }
+
+
+
+module.exports = {login,changePassword,create,get,getOne,checkHost,updateInv,updateInvDistributor,chnageTheme,ucc_registration}
