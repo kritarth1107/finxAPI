@@ -7,15 +7,15 @@ const investorsSchema = new Schema({
         required:true   
     },
     ADDRESS1:{
-        default:" ",
+        default:"-",
         type:String,   
     },
     ADDRESS2:{
-        default:" ",
+        default:"-",
         type:String,
     },
     ADDRESS3:{
-        default:" ",
+        default:"-",
         type:String
     },
     CITY:{
@@ -115,7 +115,7 @@ const investorsSchema = new Schema({
     UCC:{
         default:"NO",
         type:String,
-    },
+    }
 });
 
 const Users = mongoose.model("investors",investorsSchema);

@@ -12,10 +12,46 @@ const getParameters = async (req,res)=>{
         }
         else
         {
-            return res.status(500).json({ success:true,status:500,message: "No Parameters Found!!" });
+            return res.status(500).json({ success:false,status:500,message: "No Parameters Found!!" });
         }
 }
+
+const updateSchemes = async (req,res) =>{
+    try
+    {
+        const body = req.body;
+        const header = req.headers;
+        var upd=0;
+        var total=0;
+        if(header.auth=="7d3c660eba7dccd51bcf1ecbe22221a7")
+        {
+            const deleteData = await schemesmodel.remove({});
+            var obj = JSON.parse(body.records);
+            for(var i=0;i<obj.length;i++)
+            {
+                const create = await schemesmodel.create(obj[i]);
+                if(create!=null)
+                {
+                    upd++;
+                }
+                total++;
+            }
+
+            return res.status(200).json({ success:false,status:200,message:"DONE",UPD:upd,TOTAL:total});
+        }
+        else
+        {
+            return res.status(403).json({ success:false,status:403,message:"Unauthorised Access"});
+        }
+    }
+    catch(error)
+    {
+        console.log(error);
+        return res.status(500).json({ success:false,status:500});
+    }
+}
 module.exports = {
+    updateSchemes,
     getParameters,
     getAllSchemes:(req,res)=>{
         schemesService.list().then(result=>{

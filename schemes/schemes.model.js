@@ -2,15 +2,11 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const schemesSchema = new Schema({
-    id:{
-        type:String,
-        required:true   
-    },
     fundAMC:{
         type:String,
         required:true   
     },
-    fundName:{
+    fundPurchase:{
         type:String,
         required:true   
     },
@@ -26,7 +22,7 @@ const schemesSchema = new Schema({
         type:String,
         required:true   
     },
-    fundType:{
+    minPurchase:{
         type:String,
         required:true   
     },
