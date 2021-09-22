@@ -261,7 +261,7 @@ const main  = async (req, res) => {
                     var upDATA = ({
                                     status:false,
                                     identity:obj[j].PAN_NO+" | "+obj[j].PRODUCT+" | "+obj[j].FOLIOCHK,
-                                    message:"Failed to Scheme Details"
+                                    message:"Failed to Fetch Scheme Details"
                                 });
                                 opARRAY.push(upDATA);
                 }
