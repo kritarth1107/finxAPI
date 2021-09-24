@@ -122,7 +122,7 @@ const main  = async (req, res) => {
                 {
                     SCH_CODE = checkScheme.schemeCode;
                     SCH_IISN = checkScheme.productIISN;
-                    SCH_NAME = checkScheme.fundName;
+                    SCH_NAME = checkScheme.fundDescription;
                     SCH_AMC = checkScheme.fundAMC;
                     SCH_CATEGORY = checkScheme.fundCategory;
 

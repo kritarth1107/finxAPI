@@ -16,6 +16,29 @@ const getParameters = async (req,res)=>{
         }
 }
 
+const schemeAMC = async(req,res) =>{
+    try
+    {
+        const body = req.body;
+        const header = req.headers;
+        const schemes = await schemesmodel.find({fundAMC:body.amc});
+        if(schemes.length>0)
+        {
+            return res.status(200).json({ success:false,status:200,"records":schemes});
+        }
+        else
+        {
+             return res.status(500).json({ success:false,status:500,"message":"Inavlid AMC"});
+        }
+        
+    }
+    catch(error)
+    {
+        console.log(error);
+        return res.status(500).json({ success:false,status:500});
+    }
+}
+
 const updateSchemes = async (req,res) =>{
     try
     {
@@ -52,6 +75,7 @@ const updateSchemes = async (req,res) =>{
 }
 module.exports = {
     updateSchemes,
+    schemeAMC,
     getParameters,
     getAllSchemes:(req,res)=>{
         schemesService.list().then(result=>{

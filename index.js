@@ -9,6 +9,7 @@ const analysisRouter = require("./analysis/analysis.router");
 const investorsRouter = require("./investors/investors.router");
 const groupsRouter = require("./group/groups.router");
 const dbfRouter = require("./dbf/dbf.router");
+const cartRouter = require("./cart/carts.router");
 require("dotenv").config();
 
 DB();
@@ -23,6 +24,7 @@ app.use("/analysis",analysisRouter);
 app.use("/investor",investorsRouter);
 app.use("/groups",groupsRouter);
 app.use("/dbf",dbfRouter);
+app.use("/cart",cartRouter);
 
 
 app.listen(process.env.PORT, () =>{

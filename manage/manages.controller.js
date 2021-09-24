@@ -209,7 +209,8 @@ const checkHost = async(req,res)=>{
                         mLogoLight:result.mLogoLight,
                         mWebsite:result.mWebsite,
                         mValidity:checkValidity.VALIDITY,
-                        mPerson:result.mPerson
+                        mPerson:result.mPerson,
+                        mARN:result.mARN
                         });
                     }
                     else
