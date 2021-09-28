@@ -18,6 +18,18 @@ const transactionsSchema = new Schema({
         type:String,
         required:true   
     },
+    SCH_NAME:{
+        type:String,
+        required:true   
+    },
+    SCH_AMC:{
+        type:String,
+        required:true   
+    },
+    SCH_CATEGORY:{
+        type:String,
+        required:true   
+    },
     UNITS:{
         type:String,
         required:true   

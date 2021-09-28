@@ -64,6 +64,15 @@ const main  = async (req, res) => {
         var updated = 0;
         var opARRAY = [];
 
+        if(manage.mARN!=obj[0].BROKER_COD)
+        {
+            res.json({
+                success:false,
+                status:403,
+                message:"DBF File Contain data for other ARN"
+            });
+        }
+
         
 
         
@@ -94,6 +103,12 @@ const main  = async (req, res) => {
                 LASTUPDATE:obj[j].CREATEDON,
                 PWD_UPD:obj[j].CREATEDON,
                 HOLDING_NA:obj[j].HOLDING_NA,
+                NOM_1:obj[j].NOM_1,
+                NOM_2:obj[j].NOM_2,
+                NOM_3:obj[j].NOM_3,
+                FATCA:"NO",
+                SIGN_IMAGE:"NO",
+                GENDER:"NOT_SPECIFIED",
                 INV_APP:"NONE",
                 UCC:"NO",
                 INV_GROUP:"NOT ASSIGNED",
@@ -138,12 +153,7 @@ const main  = async (req, res) => {
                         SCH_CATEGORY:SCH_CATEGORY,
                         REP_DATE:obj[j].REP_DATE,
                         FOLIO_DATE:obj[j].FOLIO_DATE,
-                        HOLDING_NA:obj[j].HOLDING_NA,
                         REGISTRAR:obj[j].REGISTRAR,
-                        GST_STATE:obj[j].GST_STATE,
-                        NOM_1:obj[j].NOM_1,
-                        NOM_2:obj[j].NOM_2,
-                        NOM_3:obj[j].NOM_3,
                         CREATEDON:obj[j].CREATEDON,
                         LASTUPDATE:obj[j].CREATEDON,
                         DISTRIBUTOR:key_n[1],
@@ -172,7 +182,7 @@ const main  = async (req, res) => {
                                 DISTRIBUTOR:key_n[1],
                                 PAN_NO:obj[j].PAN_NO,
                                 FOLIOCHK:obj[j].FOLIOCHK,
-                                FOLIO_DATE:obj[j].FOLIO_DATE,
+                                //FOLIO_DATE:obj[j].FOLIO_DATE,
                                 PRODUCT:obj[j].PRODUCT
                             });
                             if(checkFolio==null)
@@ -323,6 +333,18 @@ const transaction = async (req,res)=>{
         for(var j =0 ;j<obj.length;j++)
         {
             total_count++;
+            var SCH_NAME = "-";
+            var SCH_AMC = "-";
+            var SCH_CATEGORY = "-";
+
+            const schemeD = await schemesModel.findOne({productCode:obj[j].PRODCODE});
+            if(schemeD!=null)
+            {
+                SCH_NAME = schemeD.fundDescription;
+                SCH_AMC = schemeD.fundAMC;
+                SCH_CATEGORY = schemeD.fundCategory;
+
+            }
             var transData = ({
                 PRODCODE:obj[j].PRODCODE,
                 FOLIO_NO:obj[j].FOLIO_NO,
@@ -334,6 +356,9 @@ const transaction = async (req,res)=>{
                 TD_NAV:obj[j].TD_NAV,
                 STAMP_DUTY:obj[j].STAMP_DUTY,
                 TRX_NATURE:obj[j].TRX_NATURE,
+                SCH_NAME:SCH_NAME,
+                SCH_AMC:SCH_AMC,
+                SCH_CATEGORY:SCH_CATEGORY,
                 REGISTRAR:obj[j].REGISTRAR,
                 DISTRIBUTOR:key_n[1],
                 CREATEDATE:obj[j].CREATEDATE,
@@ -371,7 +396,7 @@ const transaction = async (req,res)=>{
                 var upDATA = ({
                     status:false,
                     identity:obj[j].FOLIO_NO+" | "+obj[j].TRXNNO,
-                    message:"Transactionalready exists"
+                    message:"Transaction already exists"
                 });
                 opARRAY.push(upDATA);
             }

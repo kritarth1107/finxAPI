@@ -46,27 +46,7 @@ const foliosSchema = new Schema({
         type:String,
         required:true   
     },
-    HOLDING_NA:{
-        type:String,
-        required:true   
-    },
     REGISTRAR:{
-        type:String,
-        required:true   
-    },
-    GST_STATE:{
-        type:String,
-        required:true   
-    },
-    NOM_1:{
-        type:String,
-        required:true   
-    },
-    NOM_2:{
-        type:String,
-        required:true   
-    },
-    NOM_3:{
         type:String,
         required:true   
     },

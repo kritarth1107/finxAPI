@@ -188,7 +188,8 @@ const folioGET = async (req, res) => {
             return res.status(404).json({
                 success: false,
                 status: 404,
-                message: "No Folios Found!!"
+                message: "No Folios Found!!",
+                records: f
             });
         }
         for (var i = 0; i < f.length; i++) {
@@ -301,6 +302,16 @@ const folioGETsingle = async (req, res) => {
 
         });
 
+        const checkInv = await investorsModel.findOne({PAN_NO:PAN_NO,DISTRIBUTOR:key_n[1]});
+        if(checkInv==null)
+        {
+            return res.status(500).json({
+                success: false,
+                status: 500,
+                message: "Invalid Investor!!"
+            });
+        }
+
         var f = null;
         var f = await folioModel
                     .find({
@@ -315,7 +326,8 @@ const folioGETsingle = async (req, res) => {
             return res.status(404).json({
                 success: false,
                 status: 404,
-                message: "No Folios Found!!"
+                message: "No Folios Found!!",
+                records: f
             });
         }
         for (var i = 0; i < f.length; i++) {
@@ -364,13 +376,13 @@ const folioGETsingle = async (req, res) => {
                 FOLIO_DATE: f[i].FOLIO_DATE,
                 REGISTRAR: f[i].REGISTRAR,
                 HOLDING_NA: f[i].HOLDING_NA,
-                BANK_NAME: f[i].BANK_NAME,
-                BRANCH: f[i].BRANCH,
-                AC_TYPE: f[i].AC_TYPE,
-                AC_NO: f[i].AC_NO,
-                NOM_1: f[i].NOM_1,
-                NOM_2: f[i].NOM_2,
-                NOM_3: f[i].NOM_3,
+                BANK_NAME: checkInv.BANK_NAME,
+                BRANCH: checkInv.BRANCH,
+                AC_TYPE: checkInv.AC_TYPE,
+                AC_NO: checkInv.AC_NO,
+                NOM_1: checkInv.NOM_1,
+                NOM_2: checkInv.NOM_2,
+                NOM_3: checkInv.NOM_3,
                 TRANS: transactions
             });
             finalsData.push(upds);
@@ -476,7 +488,8 @@ const folioClient = async (req, res) => {
             return res.status(404).json({
                 success: false,
                 status: 404,
-                message: "No Folios Found"
+                message: "No Folios Found",
+                records: f
             });
         }
         for (var i = 0; i < f.length; i++) {
@@ -611,7 +624,8 @@ const folioClientSingle = async (req, res) => {
             return res.status(404).json({
                 success: false,
                 status: 404,
-                message: "No Folios Found"
+                message: "No Folios Found",
+                records: f
             });
         }
         for (var i = 0; i < f.length; i++) {

@@ -196,7 +196,7 @@ const create = async(req,res)=>{
     }
 
     const inv = await investorssModel.findOne({PAN_NO:body.PAN_NO,DISTRIBUTOR:key_n[1]}).lean();
-    if(manage==null)
+    if(inv==null)
     {
         var dataINV = ({
                 INV_NAME:body.INV_NAME,
@@ -221,6 +221,12 @@ const create = async(req,res)=>{
                 LASTUPDATE:body.DATE,
                 PWD_UPD:body.DATE,
                 HOLDING_NA:body.HOLDING_NA,
+                NOM_1:body.NOM_1,
+                NOM_2:body.NOM_2,
+                NOM_3:body.NOM_3,
+                GENDER:body.GENDER,
+                FATCA:"NO",
+                SIGN_IMAGE:"NO",
                 INV_APP:"NONE",
                 UCC:body.UCC,
                 INV_GROUP:"NOT ASSIGNED",
@@ -312,7 +318,14 @@ const getOne = async(req,res)=>{
                 PINCODE:getAll.PINCODE,
                 BRANCH:getAll.BRANCH,
                 AC_NO:getAll.AC_NO,
+                BANK_NAME:getAll.BANK_NAME,
                 HOLDING_NA:getAll.HOLDING_NA,
+                NOM_1:getAll.NOM_1,
+                NOM_2:getAll.NOM_2,
+                NOM_3:getAll.NOM_3,
+                FATCA:getAll.FATCA,
+                GENDER:getAll.GENDER,
+                SIGN_IMAGE:getAll.SIGN_IMAGE,
                 AC_TYPE:getAll.AC_TYPE,
                 UCC:getAll.UCC,
                 INV_MOBILE:getAll.INV_MOBILE
@@ -682,6 +695,7 @@ LASTUPDATE:body.DATE}
 const updateInvDistributor = async(req,res)=>{
     try
     {
+            var body = req.body;
         const header = req.headers;
         var website = header.website;
         var key = decrypt(header.auth);
@@ -714,7 +728,7 @@ const updateInvDistributor = async(req,res)=>{
         else
         {
             
-           const invUpdate = await investorssModel.findByOneAndUpdate({PAN_NO:body.PAN_NO},
+           const invUpdate = await investorssModel.findOneAndUpdate({PAN_NO:body.PAN_NO},
                 {INV_NAME:body.INV_NAME,
 MOBILE_NO:body.MOBILE_NO,
 OCCUPATION:body.OCCUPATION,
@@ -722,6 +736,14 @@ EMAIL:body.EMAIL,
 ADDRESS1:body.ADDRESS1,
 ADDRESS2:body.ADDRESS2,
 ADDRESS3:body.ADDRESS3,
+CITY:body.CITY,
+PINCODE:body.PINCODE,
+INV_DOB:body.INV_DOB,
+BANK_NAME:body.BANK_NAME,
+BRANCH:body.BRANCH,
+AC_TYPE:body.AC_TYPE,
+AC_NO:body.AC_NO,
+HOLDING_NA:body.HOLDING_NA,
 LASTUPDATE:body.DATE}
                 );
             
@@ -746,12 +768,52 @@ LASTUPDATE:body.DATE}
     }
     catch(error)
     {
+        console.log(error);
         res.json({
             success:false,
             status:500,
             message:error
         });
     }
+}
+
+const mob_email = async(req,res)=>{
+    try
+    {
+        const header = req.headers;
+        const body = req.body;
+        var website = header.website;
+        var key = decrypt(header.auth);
+        var key_n = key.split("|");
+        var records = [];
+        if(key_n[0]!="DISTRIBUTOR")
+        {
+            return res.status(403).json({ success:false,status:403,message: "Unauthorised Access!!" });
+        }
+        const manage = await managesModel.findOne({mWebsite:website,mFlag:1,mKey:key_n[1]}).lean();
+        if(manage==null)
+        {
+            res.json({
+                success:false,
+                status:500,
+                message:"Invalid Host"
+            });
+        }
+        const mobCount = await investorssModel.find({MOBILE_NO:"",DISTRIBUTOR:key_n[1]});
+        const emailCOunt = await investorssModel.find({EMAIL:"",DISTRIBUTOR:key_n[1]});
+        return res.status(200).json({ success:true,status:200,message: "!!" ,MOB_COUNT:mobCount.length,EMAIL_COUNT:emailCOunt.length});
+
+    }
+    catch(error)
+    {
+        console.log(error);
+        res.json({
+            success:false,
+            status:500,
+            message:error
+        });
+    }
+
 }
 
 
@@ -801,6 +863,8 @@ const ucc_registration = async(req,res)=>{
                             UCC:body.PAN_NO,
                             BRANCH:body.BRANCH,
                             AC_TYPE:body.AC_TYPE,
+                            NOM_1:body.NOM_1,
+                            NOM_2:body.NOM_2,
                             AC_NO:body.AC_NO
                     });
                 if(updateUCC==null)
@@ -929,4 +993,4 @@ const ucc_existing = async(req,res) =>{
 
 
 
-module.exports = {login,changePassword,create,get,getOne,checkHost,updateInv,updateInvDistributor,chnageTheme,ucc_registration,ucc_existing}
+module.exports = {login,changePassword,create,get,getOne,checkHost,updateInv,updateInvDistributor,chnageTheme,ucc_registration,ucc_existing,mob_email}

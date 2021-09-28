@@ -76,6 +76,30 @@ const investorsSchema = new Schema({
         default:"SI",
         type:String,  
     },
+    NOM_1:{
+        type:String,
+        required:true   
+    },
+    NOM_2:{
+        type:String,
+        required:true   
+    },
+    NOM_3:{
+        type:String,
+        required:true   
+    },
+    FATCA:{
+        type:String,
+        required:true   
+    },
+    GENDER:{
+        type:String,
+        required:true   
+    },
+    SIGN_IMAGE:{
+        type:String,
+        required:true   
+    },
     CRDATE:{
         type:String,
         required:true   

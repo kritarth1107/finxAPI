@@ -12,5 +12,6 @@ router.post("/d/update",investorsController.updateInvDistributor);
 router.post("/chnage-theme",investorsController.chnageTheme);
 router.post("/ucc",investorsController.ucc_registration);
 router.post("/ucc/existing",investorsController.ucc_existing);
+router.post("/mobile-email",investorsController.mob_email);
 
 module.exports = router;

@@ -49,7 +49,7 @@ const getGroups = async (req, res) => {
         const f = await groupModel.find({DISTRIBUTOR:key_n[1]});
         if(f.length<1)
         {
-            return res.status(500).json({ success:false,status:500,message: "Error!!" });
+            return res.status(500).json({ success:false,status:500,message: "Error!!",group:f });
         }
         else
         {
@@ -76,7 +76,7 @@ const getGroups = async (req, res) => {
     catch(error)
     {
         console.log(error);
-        res.json(error);
+        return res.status(500).json({ success:false,status:500,message: error });
 
     }
 }
@@ -131,7 +131,7 @@ const getGroups = async (req, res) => {
     }
     catch(error)
     {
-        res.json(error);
+        return res.status(500).json({ success:false,status:500,message: error });
     }
  }
 
@@ -189,7 +189,7 @@ const addMember = async (req,res) => {
     }
     catch(error)
     {
-        res.json(error);
+        return res.status(500).json({ success:false,status:500,message: error });
     }
  }
 
@@ -251,7 +251,7 @@ const addMember = async (req,res) => {
     }
     catch(error)
     {
-        res.json(error);
+        return res.status(500).json({ success:false,status:500,message: error });
     }
  }
 
@@ -306,7 +306,7 @@ const addMember = async (req,res) => {
     catch(error)
     {
         console.log(error);
-        res.json(error);
+        return res.status(500).json({ success:false,status:500,message: error });
     }
  }
 
@@ -355,7 +355,7 @@ const addMember = async (req,res) => {
     catch(error)
     {
         console.log(error);
-        res.json(error);
+        return res.status(500).json({ success:false,status:500,message: error });
     }
  }
 
@@ -418,7 +418,7 @@ const addMember = async (req,res) => {
     }
     catch(error)
     {
-        res.json(error);
+       return res.status(500).json({ success:false,status:500,message: error });
     }
  }
 
@@ -489,7 +489,8 @@ const create = async (req, res) => {
     }
     catch(error)
     {
-        res.json(error);
+        console.log(error);
+        return res.status(500).json({ success:false,status:500,message: error });
 
     }
 
